@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="ru">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+        <title>Калькулятор коробок</title>
+
+        <link rel="stylesheet" href="style.css" />
+
+        <link rel="preconnect" href="https://fonts.googleapis.com" />
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+
+        <link
+            href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap"
+            rel="stylesheet"
+        />
+    </head>
+
+    <body>
+        <div class="container">
+            <div class="card">
+                <h1>Калькулятор коробок</h1>
+
+                <div class="section box-section">
+                    <div class="section-title">Размеры коробки</div>
+
+                    <div class="grid">
+                        <div class="field">
+                            <label>Длина коробки в мм (L)</label>
+                            <input type="number" id="L" />
+                        </div>
+
+                        <div class="field">
+                            <label>Ширина коробки в мм (W)</label>
+                            <input type="number" id="W" />
+                        </div>
+
+                        <div class="field">
+                            <label>Высота коробки в мм (H)</label>
+                            <input type="number" id="H" />
+                        </div>
+                    </div>
+                </div>
+
+                <div class="section sheet-section">
+                    <div class="section-title">Размеры листа</div>
+
+                    <div class="grid">
+                        <div class="field">
+                            <label>Длина листа в мм</label>
+                            <input type="number" id="LL" />
+                        </div>
+
+                        <div class="field">
+                            <label>Ширина листа в мм</label>
+                            <input type="number" id="LW" />
+                        </div>
+                    </div>
+                </div>
+
+                <div class="buttons">
+                    <button id="calculateBtn">РАССЧИТАТЬ</button>
+
+                    <button id="clearBtn" class="secondary">
+                        ОЧИСТИТЬ РАЗМЕРЫ КОРОБКИ
+                    </button>
+                </div>
+
+                <div class="results">
+                    <div class="field">
+                        <label>Габаритный размер крышки</label>
+                        <input id="coverSize" readonly />
+                    </div>
+
+                    <div class="field">
+                        <label>Габаритный размер дна</label>
+                        <input id="bottomSize" readonly />
+                    </div>
+
+                    <div class="field">
+                        <label>Размер боковины</label>
+                        <input id="sideSize" readonly />
+                    </div>
+
+                    <div class="field">
+                        <label>Количество крышек на лист</label>
+                        <input id="CQ" readonly />
+                    </div>
+
+                    <div class="field">
+                        <label>Количество доньев на лист</label>
+                        <input id="BQ" readonly />
+                    </div>
+
+                    <div class="field">
+                        <label>Количество боковин на лист</label>
+                        <input id="SQ" readonly />
+                    </div>
+
+                    <div id="sheetStatus" class="status"></div>
+
+                    <div class="layout" id="coverLayout"></div>
+                    <div class="layout" id="bottomLayout"></div>
+                    <div class="layout" id="sideLayout"></div>
+                </div>
+            </div>
+        </div>
+
+        <script src="script.js"></script>
+    </body>
+</html>
