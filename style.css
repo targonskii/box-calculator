@@ -234,6 +234,9 @@ button {
 .cell.bottom {
     background: #ff69cf;
 }
+.cell.bottom-full {
+    background: #ffaf69;
+}
 .cell.side {
     background: #004d33;
 }

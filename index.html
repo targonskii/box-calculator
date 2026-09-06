@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="ru">
     <head>
         <meta charset="UTF-8" />
@@ -68,31 +68,49 @@
                 </div>
 
                 <div class="results">
+                    <!-- КРЫШКА -->
                     <div class="field">
                         <label>Габаритный размер крышки</label>
                         <input id="coverSize" readonly />
                     </div>
 
+                    <!-- ОБЫЧНОЕ ДНО -->
                     <div class="field">
                         <label>Габаритный размер дна</label>
                         <input id="bottomSize" readonly />
                     </div>
 
+                    <!-- НОВОЕ: ЦЕЛЬНОЕ ДНО С БОКОВУШКАМИ -->
+                    <div class="field">
+                        <label>Габаритный размер дна с боковушками</label>
+                        <input id="bottomFullSize" readonly />
+                    </div>
+
+                    <!-- БОКОВИНА -->
                     <div class="field">
                         <label>Размер боковины</label>
                         <input id="sideSize" readonly />
                     </div>
 
+                    <!-- КОЛИЧЕСТВО КРЫШЕК -->
                     <div class="field">
                         <label>Количество крышек на лист</label>
                         <input id="CQ" readonly />
                     </div>
 
+                    <!-- КОЛИЧЕСТВО ОБЫЧНЫХ ДОНЬЕВ -->
                     <div class="field">
                         <label>Количество доньев на лист</label>
                         <input id="BQ" readonly />
                     </div>
 
+                    <!-- НОВОЕ: КОЛИЧЕСТВО ЦЕЛЬНЫХ ДОНЬЕВ -->
+                    <div class="field">
+                        <label>Количество доньев с боковушками на лист</label>
+                        <input id="BFQ" readonly />
+                    </div>
+
+                    <!-- КОЛИЧЕСТВО БОКОВИН -->
                     <div class="field">
                         <label>Количество боковин на лист</label>
                         <input id="SQ" readonly />
@@ -100,8 +118,16 @@
 
                     <div id="sheetStatus" class="status"></div>
 
+                    <!-- РАСКРОЙ КРЫШЕК -->
                     <div class="layout" id="coverLayout"></div>
+
+                    <!-- РАСКРОЙ ОБЫЧНЫХ ДОНЬЕВ -->
                     <div class="layout" id="bottomLayout"></div>
+
+                    <!-- НОВОЕ: РАСКРОЙ ЦЕЛЬНОГО ДНА С БОКОВУШКАМИ -->
+                    <div class="layout" id="bottomFullLayout"></div>
+
+                    <!-- РАСКРОЙ БОКОВИН -->
                     <div class="layout" id="sideLayout"></div>
                 </div>
             </div>
