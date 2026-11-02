@@ -19,26 +19,25 @@ function save() {
         "H",
         "LW",
         "LL",
-
         "coverSize",
         "bottomSize",
         "bottomFullSize",
         "sideSize",
-
         "CQ",
         "BQ",
         "BFQ",
         "SQ",
+        "OBKLKRSize",
+        "OBKLDFSize",
+        "OBKLBSize",
+        "OBKLDSize",
     ];
 
     const data = {};
 
     ids.forEach((i) => {
         const el = document.getElementById(i);
-
-        if (el) {
-            data[i] = el.value;
-        }
+        if (el) data[i] = el.value;
     });
 
     localStorage.setItem(STORAGE_KEY, JSON.stringify(data));
@@ -48,27 +47,23 @@ function save() {
 
 function load() {
     const saved = localStorage.getItem(STORAGE_KEY);
-
     if (!saved) return;
 
     const data = JSON.parse(saved);
 
     Object.keys(data).forEach((k) => {
         const el = document.getElementById(k);
-
-        if (el) {
-            el.value = data[k];
-        }
+        if (el) el.value = data[k];
     });
 }
 
 /* ------------------ CLEAR ------------------ */
 
 function clearAll() {
-    if (!confirm("Очистить всё?")) return;
-
+    // Очищаем размеры коробки без подтверждения
     ["W", "L", "H"].forEach((id) => set(id, ""));
 
+    // Очищаем результаты расчётов и выкроек
     [
         "coverSize",
         "bottomSize",
@@ -78,16 +73,24 @@ function clearAll() {
         "BQ",
         "BFQ",
         "SQ",
+        "OBKLKRSize",
+        "OBKLDFSize",
+        "OBKLBSize",
+        "OBKLDSize",
     ].forEach((id) => set(id, ""));
 
+    // Очищаем схемы раскроя
     document.getElementById("coverLayout").innerHTML = "";
     document.getElementById("bottomLayout").innerHTML = "";
     document.getElementById("bottomFullLayout").innerHTML = "";
     document.getElementById("sideLayout").innerHTML = "";
 
+    // Сбрасываем статус
     document.getElementById("sheetStatus").textContent = "";
     document.getElementById("sheetStatus").className = "status";
 
+    // Сохраняем очищенные значения.
+    // Размеры листа LW и LL остаются без изменений.
     save();
 }
 
@@ -95,24 +98,24 @@ function clearAll() {
 
 function pack(w, h, W, H) {
     const a = Math.floor(W / w) * Math.floor(H / h);
-
     const b = Math.floor(W / h) * Math.floor(H / w);
 
     return Math.max(a, b);
 }
 
 function bestFit(w, h, sheetW, sheetH) {
-    const normal = pack(w, h, sheetW, sheetH);
-
-    return normal;
+    return pack(w, h, sheetW, sheetH);
 }
 
 /* ------------------ DRAW GRID VISUAL ------------------ */
 
 function drawLayout(containerId, w, h, sheetW, sheetH, color, labelText) {
     const container = document.getElementById(containerId);
-
     container.innerHTML = "";
+
+    if (w <= 0 || h <= 0 || sheetW <= 0 || sheetH <= 0) {
+        return 0;
+    }
 
     const rect = container.getBoundingClientRect();
 
@@ -131,9 +134,7 @@ function drawLayout(containerId, w, h, sheetW, sheetH, color, labelText) {
     /* ---------------- LABEL ---------------- */
 
     const label = document.createElement("div");
-
     label.className = "layout-label";
-
     label.textContent = labelText;
 
     container.appendChild(label);
@@ -147,7 +148,6 @@ function drawLayout(containerId, w, h, sheetW, sheetH, color, labelText) {
     const rotatedRows = Math.floor(H / w);
 
     const normalCount = normalCols * normalRows;
-
     const rotatedCount = rotatedCols * rotatedRows;
 
     const useRotated = rotatedCount > normalCount;
@@ -167,13 +167,9 @@ function drawLayout(containerId, w, h, sheetW, sheetH, color, labelText) {
     sheet.style.position = "absolute";
     sheet.style.left = "0";
     sheet.style.top = "0";
-
     sheet.style.width = W * scale + "px";
-
     sheet.style.height = H * scale + "px";
-
     sheet.style.border = "1px solid #0b1a30ff";
-
     sheet.style.borderRadius = "0px";
 
     container.appendChild(sheet);
@@ -184,23 +180,16 @@ function drawLayout(containerId, w, h, sheetW, sheetH, color, labelText) {
         const el = document.createElement("div");
 
         el.className = "cell " + color;
-
         el.style.position = "absolute";
-
         el.style.width = bw * scale + "px";
-
         el.style.height = bh * scale + "px";
 
         const x = (i % cols) * bw * scale;
-
         const y = Math.floor(i / cols) * bh * scale;
 
         el.style.left = x + "px";
-
         el.style.top = y + "px";
-
         el.style.border = "1px solid rgba(255,255,255,0.5)";
-
         el.style.boxSizing = "border-box";
 
         container.appendChild(el);
@@ -221,163 +210,161 @@ function calculate() {
 
     if (!W || !L || !H || !LW || !LL) {
         alert("Заполните все поля");
-
         return;
     }
 
     /* ==================================================
        ОБЫЧНОЕ ДНО
-       СТАРАЯ ЛОГИКА НЕ МЕНЯЕТСЯ
-       ================================================== */
+       Существующая логика
+    ================================================== */
 
     const BW = L + 3;
-
     const BL = W + H * 2;
 
     /* ==================================================
        БОКОВИНЫ
-       СТАРАЯ ЛОГИКА
-       ================================================== */
+       Существующая логика
+    ================================================== */
 
     const SW = W;
-
     const SL = H;
 
     /* ==================================================
        КРЫШКА
-       СТАРАЯ ЛОГИКА
-       ================================================== */
+       Существующая логика
+    ================================================== */
 
     const CW = L + 45;
-
     const CL = W + 45;
 
     /* ==================================================
        ЦЕЛЬНОЕ ДНО С БОКОВУШКАМИ
-       
-       BLF = длина коробки + 2 высоты
-       BWF = ширина коробки + 2 высоты
-       ================================================== */
+       Существующая логика
+    ================================================== */
 
     const BLF = L + H * 2;
-
     const BWF = W + H * 2;
 
     /* ==================================================
        КОЛИЧЕСТВО ДЕТАЛЕЙ НА ЛИСТ
-       ================================================== */
+    ================================================== */
 
     const CQ = pack(CW, CL, LW, LL);
-
     const BQ = pack(BW, BL, LW, LL);
-
-    /* ЦЕЛЬНОЕ ДНО С БОКОВУШКАМИ */
-
     const BFQ = pack(BLF, BWF, LW, LL);
-
     const SQ = pack(SW, SL, LW, LL);
 
     /* ==================================================
-       ВЫВОД РАЗМЕРОВ
-       ================================================== */
+       ВЫКРОЙКИ БУМАГИ ДЛЯ ОБКЛЕЙКИ
+    ================================================== */
+
+    // Выкройка крышки
+    const OBKLKRL = L + 78;
+    const OBKLKRW = W + 78;
+
+    // Выкройка цельного дна
+    const OBKLDFL = L + H + 33;
+    const OBKLDWFull = W + H + 33;
+
+    // Выкройка обычного дна
+    const OBKLDL = L - 7;
+    const OBKLDW = W - 7;
+
+    // Выкройка боковины дна
+    const OBKLBL = 2 * L + 2 * W + 25;
+    const OBKLBW = H + 30;
+
+    /* ==================================================
+       ВЫВОД ГАБАРИТНЫХ РАЗМЕРОВ КОРОБКИ
+    ================================================== */
 
     set("coverSize", `${CW}*${CL}`);
-
     set("bottomSize", `${BW}*${BL}`);
-
-    /* НОВОЕ */
-
     set("bottomFullSize", `${BLF}*${BWF}`);
-
     set("sideSize", `${SW}*${SL}`);
 
     /* ==================================================
        ВЫВОД КОЛИЧЕСТВА
-       ================================================== */
+    ================================================== */
 
     set("CQ", CQ);
-
     set("BQ", BQ);
-
     set("BFQ", BFQ);
-
     set("SQ", SQ);
 
     /* ==================================================
+       ВЫВОД ВЫКРОЕК БУМАГИ ДЛЯ ОБКЛЕЙКИ
+    ================================================== */
+
+    // Формат: длина*ширина
+
+    set("OBKLKRSize", `${OBKLKRL}*${OBKLKRW}`);
+
+    set("OBKLDFSize", `${OBKLDFL}*${OBKLDWFull}`);
+
+    set("OBKLBSize", `${OBKLBL}*${OBKLBW}`);
+
+    set("OBKLDSize", `${OBKLDL}*${OBKLDW}`);
+
+    /* ==================================================
        VISUAL — КРЫШКИ
-       ================================================== */
+    ================================================== */
 
     const coverFit = drawLayout(
         "coverLayout",
-
         CW,
         CL,
-
         LW,
         LL,
-
         "cover",
-
         "КРЫШКИ",
     );
 
     /* ==================================================
        VISUAL — ОБЫЧНЫЕ ДОНЬЯ
-       ================================================== */
+    ================================================== */
 
     const bottomFit = drawLayout(
         "bottomLayout",
-
         BW,
         BL,
-
         LW,
         LL,
-
         "bottom",
-
         "ДОНЬЯ",
     );
 
     /* ==================================================
        VISUAL — ЦЕЛЬНОЕ ДНО С БОКОВУШКАМИ
-       ================================================== */
+    ================================================== */
 
     const bottomFullFit = drawLayout(
         "bottomFullLayout",
-
         BLF,
         BWF,
-
         LW,
         LL,
-
         "bottom-full",
-
         "ДОНЬЯ С БОКОВУШКАМИ",
     );
 
     /* ==================================================
        VISUAL — БОКОВИНЫ
-       ================================================== */
+    ================================================== */
 
     const sideFit = drawLayout(
         "sideLayout",
-
         SW,
         SL,
-
         LW,
         LL,
-
         "side",
-
         "БОКОВИНЫ",
     );
 
     /* ==================================================
        STATUS
-       ================================================== */
+    ================================================== */
 
     const sheetStatus = document.getElementById("sheetStatus");
 
@@ -385,21 +372,18 @@ function calculate() {
 
     if (maxFit === 0) {
         sheetStatus.textContent = "❌ Ничего не помещается";
-
         sheetStatus.className = "status bad";
     } else if (CQ === 0 || BQ === 0 || BFQ === 0 || SQ === 0) {
         sheetStatus.textContent = "⚠️ Частичная раскладка";
-
         sheetStatus.className = "status warn";
     } else {
         sheetStatus.textContent = "✅ Оптимальный раскрой";
-
         sheetStatus.className = "status ok";
     }
 
     /* ==================================================
        SAVE
-       ================================================== */
+    ================================================== */
 
     save();
 }
