@@ -263,8 +263,8 @@ function calculate() {
     const OBKLKRW = W + 78;
 
     // Выкройка цельного дна
-    const OBKLDFL = L + H + 33;
-    const OBKLDWFull = W + H + 33;
+    const OBKLDFL = L + 2 * H + 33;
+    const OBKLDWFull = W + 2 * H + 33;
 
     // Выкройка обычного дна
     const OBKLDL = L - 7;
