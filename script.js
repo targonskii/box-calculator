@@ -271,7 +271,7 @@ function calculate() {
     const OBKLDW = W - 7;
 
     // Выкройка боковины дна
-    const OBKLBL = 2 * L + 2 * W + 25;
+    const OBKLBL = 2 * L + 2 * W + 30;
     const OBKLBW = H + 30;
 
     /* ==================================================
